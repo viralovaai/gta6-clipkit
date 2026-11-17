@@ -1,0 +1,11 @@
+# ClipKit outputs (regenerated per run)
+out/
+out-*/
+test-out/
+test-input/
+__pycache__/
+*.wav
+*.ass
+# whisper model is downloaded by setup.sh, not committed
+models/
+ggml-*.bin

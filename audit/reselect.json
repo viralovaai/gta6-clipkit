@@ -1,0 +1,46 @@
+{
+  "candidates": [
+    {
+      "start": 9.8,
+      "end": 25.16,
+      "score": 0.7168,
+      "parts": {
+        "speech_density_wps": 2.93,
+        "max_gap_s": 0.2,
+        "words": 45,
+        "keyword_hits_strong": 1,
+        "keyword_hits_med": 0,
+        "keywords_found": [
+          "jason"
+        ],
+        "mean_volume_db": -15.8,
+        "scene_cuts": 3,
+        "density": 1.0,
+        "keyword": 0.333,
+        "energy": 0.968,
+        "cut_rate": 0.488
+      },
+      "text": "What are you doing up there? I'm just fixing some leaks. Seriously dude, you got some time on your hands. I got some properties with paying tenants. Well that's what you came by. Just go get me my checks. See you Brian, love you Jason."
+    },
+    {
+      "start": 88.233333,
+      "end": 117.933333,
+      "score": 0.5633,
+      "parts": {
+        "speech_density_wps": 2.05,
+        "max_gap_s": 4.0,
+        "words": 61,
+        "keyword_hits_strong": 0,
+        "keyword_hits_med": 0,
+        "keywords_found": [],
+        "mean_volume_db": -12.9,
+        "scene_cuts": 6,
+        "density": 0.822,
+        "keyword": 0.0,
+        "energy": 1.0,
+        "cut_rate": 0.505
+      },
+      "text": "Trust me, this place is just the start for us. Bring the bells. The only thing that matters is we will, and what you got. Gotta do this, you're doing it right. Yo, do this full effect? You got your name, a dress, they got everything. Us cops, we gotta protect each other. You're amazing, we got this. We got it."
+    }
+  ]
+}

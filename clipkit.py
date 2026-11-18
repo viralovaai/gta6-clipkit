@@ -849,19 +849,28 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 # Kinetic captions + hook title (HyperFrames overlay, portfolio-reel style)
 # ---------------------------------------------------------------------------
 def find_hyperframes_cli():
-    """Locate the hyperframes CLI, or None when it is not installed."""
-    found = shutil.which("hyperframes")
-    if found:
-        return found
+    """Locate the hyperframes CLI, or None when it is not installed.
+
+    Order: the repo-local install (hf-assets/node_modules, created by
+    setup.sh), then PATH, then the old VM checkout as a last resort.
+    A fresh clone must NOT depend on the VM-only path.
+    """
+    repo_root = Path(__file__).resolve().parent
     cands = [
-        Path.home() / "workspace/muse-portfolio-reel/v4-hyperframes"
-        / "node_modules/.bin/hyperframes",
-        Path.home() / "workspace/gta6-clipkit/hf-assets"
-        / "node_modules/.bin/hyperframes",
+        repo_root / "hf-assets" / "node_modules" / ".bin" / "hyperframes",
+        Path.home() / "workspace" / "gta6-clipkit" / "hf-assets"
+        / "node_modules" / ".bin" / "hyperframes",
     ]
     for c in cands:
         if c.is_file() and os.access(c, os.X_OK):
             return str(c)
+    found = shutil.which("hyperframes")
+    if found:
+        return found
+    vm = (Path.home() / "workspace/muse-portfolio-reel/v4-hyperframes"
+          / "node_modules/.bin/hyperframes")
+    if vm.is_file() and os.access(vm, os.X_OK):
+        return str(vm)
     return None
 
 
@@ -904,15 +913,22 @@ def build_hf_overlay(clip_start, clip_end, cues, words, hook, style,
 
     hf_cli = find_hyperframes_cli()
     if not hf_cli:
-        print("clipkit: hyperframes CLI not found — falling back to "
-              "ASS captions (see README)", file=sys.stderr)
+        print("clipkit: WARNING — HyperFrames unavailable: hyperframes "
+              "CLI not found. The bold template will fall back to ASS "
+              "captions and will NOT look like the portfolio reel. To "
+              "enable it, install Node.js 18+ and run setup.sh (it runs "
+              "npm install in hf-assets/), or npm install -g hyperframes.",
+              file=sys.stderr)
         return None
-    gsap_src = Path(__file__).parent / "hf-assets" / "gsap.min.js"
+    gsap_src = Path(__file__).resolve().parent / "hf-assets" / "gsap.min.js"
     if not gsap_src.is_file():
         gsap_src = (Path.home() / "workspace/muse-portfolio-reel"
                     / "v4-hyperframes" / "gsap.min.js")
     if not gsap_src.is_file():
-        print("clipkit: gsap.min.js not found — falling back to ASS",
+        print("clipkit: WARNING — HyperFrames unavailable: gsap.min.js "
+              "not found in hf-assets/ (clone the full repo, or run "
+              "setup.sh). The bold template will fall back to ASS "
+              "captions and will NOT look like the portfolio reel.",
               file=sys.stderr)
         return None
 
@@ -1117,13 +1133,25 @@ tl.seek(0);
         '"compositions","components":"compositions/components","assets":'
         '"assets"},"media":{"autoProxy":true}}')
     nm = proj / "node_modules"
+    # Repo-local install first (hf-assets/node_modules, created by
+    # setup.sh); the old VM checkout only as a last resort.
+    repo_nm = Path(__file__).resolve().parent / "hf-assets" / "node_modules"
     v4_nm = (Path.home() / "workspace/muse-portfolio-reel/v4-hyperframes"
              / "node_modules")
-    if not nm.exists() and v4_nm.is_dir():
-        try:
-            nm.symlink_to(v4_nm, target_is_directory=True)
-        except OSError:
-            pass
+    for src_nm in (repo_nm, v4_nm):
+        if not nm.exists() and src_nm.is_dir():
+            try:
+                nm.symlink_to(src_nm, target_is_directory=True)
+                break
+            except OSError:
+                continue
+    if not nm.exists():
+        print("clipkit: WARNING — HyperFrames unavailable: no "
+              "node_modules for the overlay project. Run setup.sh with "
+              "Node.js installed so hf-assets/ is populated. The bold "
+              "template will fall back to ASS captions and will NOT "
+              "look like the portfolio reel.", file=sys.stderr)
+        return None
     tmpdir = workdir / "tmp"
     tmpdir.mkdir(exist_ok=True)
     cachedir = workdir / "hf-cache"

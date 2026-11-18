@@ -4,6 +4,7 @@ out-*/
 test-out/
 test-input/
 __pycache__/
+hf-assets/node_modules/
 *.wav
 *.ass
 # whisper model is downloaded by setup.sh, not committed

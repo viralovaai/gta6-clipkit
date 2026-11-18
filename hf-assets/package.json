@@ -1,0 +1,1 @@
+{"dependencies":{"gsap":"^3.13.0","hyperframes":"^0.9.52"},"description":"HyperFrames + GSAP runtime for ClipKit's bold-template kinetic captions. Installed by setup.sh (npm install in this folder). gsap.min.js is vendored here so the overlay HTML works without a network fetch at render time.","license":"MIT","name":"clipkit-hyperframes","private":true,"version":"1.0.0"}

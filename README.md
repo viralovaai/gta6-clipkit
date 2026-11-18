@@ -38,6 +38,8 @@ bash setup.sh
 
 That checks for `ffmpeg` + `python3`, builds whisper.cpp if `whisper-cli` is missing, and downloads the `base.en` model (~142 MB). Zero budget, zero paid keys, no GPU needed.
 
+**Node.js 18+ is optional but recommended:** `setup.sh` uses it to install HyperFrames + GSAP into `hf-assets/`, which powers the `bold` template's portfolio-reel kinetic captions. If Node is missing, setup says so plainly and clips still render — but `bold` falls back to plain ASS captions (and `clipkit.py` warns loudly about it instead of silently downgrading).
+
 Then:
 
 ```bash
